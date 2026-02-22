@@ -51,7 +51,7 @@ library RarityLibrary {
     /**
      * @dev 获取稀有度的概率（以10000为基数）
      * @param rarity 稀有度
-     * @return 概率值
+     * @return probability 概率值
      */
     function getProbability(
         Rarity rarity
@@ -61,5 +61,32 @@ library RarityLibrary {
         if (rarity == Rarity.Epic) return EPIC_PROBABILITY;
         if (rarity == Rarity.Legendary) return LEGENDARY_PROBABILITY;
         return 0;
+    }
+
+    /**
+     * @dev 将稀有度转换为字符串
+     * @param rarity 稀有度枚举
+     * @return 稀有度字符串
+     */
+    function rarityToString(
+        Rarity rarity
+    ) internal pure returns (string memory) {
+        if (rarity == Rarity.Common) return "common";
+        if (rarity == Rarity.Rare) return "rare";
+        if (rarity == Rarity.Epic) return "epic";
+        if (rarity == Rarity.Legendary) return "legendary";
+        return "unknown";
+    }
+
+    /**
+     * @dev 验证稀有度概率总和是否正确
+     * @return 是否正确
+     */
+    function validateProbabilities() internal pure returns (bool) {
+        return (COMMON_PROBABILITY +
+            RARE_PROBABILITY +
+            EPIC_PROBABILITY +
+            LEGENDARY_PROBABILITY ==
+            10000);
     }
 }
