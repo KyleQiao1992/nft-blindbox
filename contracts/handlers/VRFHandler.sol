@@ -21,6 +21,8 @@ contract VRFHandler is Initializable, OwnableUpgradeable, IVRFHandler {
     mapping(uint256 => uint256) private requestIdToTokenId;
     // 请求ID到回调合约的映射
     mapping(uint256 => address) private requestIdToCallback;
+    // 请求是否存在（避免 tokenId=0 被误判为无效）
+    mapping(uint256 => bool) private requestExists;
 
     // ============ 事件 ============
     // 事件定义在 IVRFHandler 接口中，这里不需要重复定义
@@ -96,6 +98,7 @@ contract VRFHandler is Initializable, OwnableUpgradeable, IVRFHandler {
         requestId = vrfCoordinator.requestRandomWords(req);
         requestIdToTokenId[requestId] = tokenId;
         requestIdToCallback[requestId] = callbackContract;
+        requestExists[requestId] = true;
 
         emit RandomnessRequested(requestId, tokenId);
     }
@@ -112,7 +115,7 @@ contract VRFHandler is Initializable, OwnableUpgradeable, IVRFHandler {
         uint256 tokenId = requestIdToTokenId[requestId];
         address callbackContract = requestIdToCallback[requestId];
 
-        if (tokenId == 0 || callbackContract == address(0)) {
+        if (!requestExists[requestId] || callbackContract == address(0)) {
             revert InvalidRequestId();
         }
 
@@ -128,6 +131,7 @@ contract VRFHandler is Initializable, OwnableUpgradeable, IVRFHandler {
         // 清理映射
         delete requestIdToTokenId[requestId];
         delete requestIdToCallback[requestId];
+        delete requestExists[requestId];
     }
 
     /**

@@ -1,5 +1,6 @@
 # Node modules
 /node_modules
+/frontend/node_modules
 
 # Compilation output
 /dist
@@ -12,6 +13,9 @@
 
 # Hardhat compilation (v2) support directory
 /cache
+
+# Frontend build output (Next.js)
+/frontend/.next
 
 # Typechain output
 /types

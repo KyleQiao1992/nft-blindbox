@@ -9,7 +9,7 @@ import "./RarityLibrary.sol";
  * @notice 纯逻辑库，不包含状态变量
  */
 library MetadataLibrary {
-    // ============ 函数 ============
+      // ============ 函数 ============
     /**
      * @dev 构建tokenURI
      * @param baseURI 基础URI
@@ -35,7 +35,20 @@ library MetadataLibrary {
             );
     }
 
-      /**
+    /**
+     * @dev 构建盲盒URI
+     * @param baseURI 基础URI
+     * @return 盲盒URI
+     */
+    function buildBlindBoxURI(string memory baseURI)
+        internal
+        pure
+        returns (string memory)
+    {
+        return string(abi.encodePacked(baseURI, "/blindbox.json"));
+    }
+
+    /**
      * @dev 将uint256转换为字符串
      * @param value 数值
      * @return 字符串表示
